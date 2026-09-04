@@ -1,1 +1,1754 @@
-print"Hello world"
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PERSONALWARE · by Jennifer Flora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+    <style>
+        /* ============================================================
+                   RESET & BASE
+                   ============================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ivory: #f6f1eb;
+            --near-black: #1e2b1f;
+            --sage: #8a9b7a;
+            --sage-light: #d6dfce;
+            --sage-pale: #eef3e9;
+            --border: #e0d9d0;
+            --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: var(--ivory);
+            color: var(--near-black);
+            font-family: var(--sans);
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: var(--near-black);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        a:hover {
+            color: var(--sage);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 20px;
+            }
+        }
+
+        /* ============================================================
+                   GLOBAL HEADER
+                   ============================================================ */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(246, 241, 235, 0.88);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            transition: background var(--transition);
+        }
+
+        .site-header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .header-brand .brand-name {
+            font-weight: 600;
+            color: var(--near-black);
+        }
+
+        .header-brand .brand-by {
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: var(--sage);
+            letter-spacing: 0.02em;
+            font-family: var(--sans);
+            text-transform: lowercase;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            font-size: 0.85rem;
+            font-weight: 450;
+            letter-spacing: 0.01em;
+        }
+
+        .header-nav a {
+            position: relative;
+            padding: 4px 0;
+            color: var(--near-black);
+            transition: color var(--transition);
+        }
+
+        .header-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--sage);
+            transition: width var(--transition);
+        }
+
+        .header-nav a:hover::after,
+        .header-nav a.active::after {
+            width: 100%;
+        }
+
+        .header-nav a.active {
+            color: var(--near-black);
+            font-weight: 500;
+        }
+
+        .header-nav a:not(.active) {
+            color: rgba(30, 43, 31, 0.6);
+        }
+
+        .header-nav a:not(.active):hover {
+            color: var(--near-black);
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--near-black);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .menu-toggle.open span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+        .menu-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.open span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        @media (max-width: 720px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .header-nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 20px 32px 28px;
+                background: rgba(246, 241, 235, 0.98);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border-bottom: 1px solid var(--border);
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-8px);
+                transition: var(--transition);
+            }
+
+            .header-nav.open {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateY(0);
+            }
+
+            .header-nav a {
+                font-size: 1rem;
+                padding: 6px 0;
+            }
+        }
+
+        /* ============================================================
+                   PAGE CONTAINER
+                   ============================================================ */
+        .page-container {
+            flex: 1;
+            padding-top: 8px;
+        }
+
+        .page {
+            display: none;
+            animation: fadePage 0.4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadePage {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+                   GLOBAL CTA FOOTER
+                   ============================================================ */
+        .global-cta {
+            margin-top: 80px;
+            padding: 72px 0 56px;
+            border-top: 1px solid var(--border);
+            background: var(--ivory);
+        }
+
+        .global-cta .cta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+
+        .global-cta .cta-left {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .global-cta .cta-left .cta-label {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .global-cta .cta-left h3 {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--near-black);
+        }
+
+        .global-cta .cta-left .cta-sub {
+            font-size: 1rem;
+            color: rgba(30, 43, 31, 0.7);
+            max-width: 380px;
+            margin-top: 4px;
+        }
+
+        .global-cta .cta-left .cta-sub em {
+            font-style: italic;
+            font-family: var(--serif);
+            color: var(--near-black);
+        }
+
+        .global-cta .cta-right {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .global-cta .cta-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .global-cta .cta-option:hover {
+            border-color: var(--sage);
+            background: rgba(138, 155, 122, 0.06);
+        }
+
+        .global-cta .cta-option .option-icon {
+            font-size: 1.4rem;
+            opacity: 0.6;
+            flex-shrink: 0;
+        }
+
+        .global-cta .cta-option .option-content {
+            flex: 1;
+        }
+
+        .global-cta .cta-option .option-content .option-title {
+            font-weight: 550;
+            font-size: 1rem;
+            color: var(--near-black);
+        }
+
+        .global-cta .cta-option .option-content .option-desc {
+            font-size: 0.85rem;
+            color: rgba(30, 43, 31, 0.6);
+            margin-top: 2px;
+        }
+
+        .global-cta .cta-option .option-arrow {
+            font-size: 1.2rem;
+            color: var(--sage);
+            transition: transform var(--transition);
+        }
+
+        .global-cta .cta-option:hover .option-arrow {
+            transform: translateX(4px);
+        }
+
+        .global-cta .cta-qr-hint {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: rgba(30, 43, 31, 0.5);
+            flex-wrap: wrap;
+        }
+
+        .global-cta .cta-qr-hint .qr-placeholder {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px 4px 8px;
+            border: 1px dashed var(--border);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--sage);
+        }
+
+        .global-cta .cta-qr-hint .qr-placeholder span {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 720px) {
+            .global-cta .cta-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .global-cta .cta-left h3 {
+                font-size: 1.6rem;
+            }
+
+            .global-cta .cta-left .cta-sub {
+                max-width: 100%;
+            }
+
+            .global-cta .cta-option {
+                padding: 14px 16px;
+            }
+
+            .global-cta .cta-qr-hint {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* ============================================================
+                   HOMEPAGE
+                   ============================================================ */
+        /* Hero */
+        .home-hero {
+            padding: 48px 0 40px;
+            position: relative;
+        }
+
+        .home-hero .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .home-hero .hero-flora-mark {
+            position: absolute;
+            right: 0;
+            top: -20px;
+            width: 140px;
+            height: 140px;
+            opacity: 0.10;
+            pointer-events: none;
+        }
+
+        .home-hero .hero-flora-mark svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .home-hero .hero-badge {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .home-hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(3.2rem, 12vw, 6.5rem);
+            font-weight: 700;
+            line-height: 1.02;
+            letter-spacing: -0.02em;
+            color: var(--near-black);
+        }
+
+        .home-hero .hero-byline {
+            font-family: var(--serif);
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-style: italic;
+            color: var(--sage);
+            margin-top: -4px;
+        }
+
+        .home-hero .hero-tagline {
+            font-family: var(--serif);
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--near-black);
+            margin-top: 8px;
+        }
+
+        .home-hero .hero-sub {
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(30, 43, 31, 0.4);
+            margin-top: 4px;
+            font-weight: 450;
+        }
+
+        .home-hero .hero-text-block {
+            margin-top: 32px;
+            max-width: 540px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .home-hero .hero-text-block .hero-main-text {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--near-black);
+            font-weight: 400;
+        }
+
+        .home-hero .hero-text-block .hero-main-text strong {
+            font-weight: 500;
+            color: var(--near-black);
+        }
+
+        .home-hero .hero-text-block .hero-chinese {
+            font-size: 0.95rem;
+            color: rgba(30, 43, 31, 0.55);
+            font-weight: 400;
+            border-left: 2px solid var(--sage-light);
+            padding-left: 16px;
+        }
+
+        .home-hero .hero-made {
+            margin-top: 12px;
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--sage);
+        }
+
+        .home-hero .hero-ctas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 32px;
+            margin-top: 28px;
+        }
+
+        .home-hero .hero-ctas .cta-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 480;
+            color: var(--near-black);
+            border-bottom: 1.5px solid var(--sage-light);
+            padding-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .home-hero .hero-ctas .cta-link:hover {
+            border-color: var(--sage);
+            color: var(--near-black);
+        }
+
+        .home-hero .hero-ctas .cta-link .arrow {
+            font-size: 1.1rem;
+            transition: transform var(--transition);
+        }
+
+        .home-hero .hero-ctas .cta-link:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 640px) {
+            .home-hero {
+                padding: 24px 0 20px;
+            }
+
+            .home-hero .hero-flora-mark {
+                width: 80px;
+                height: 80px;
+                top: 0;
+            }
+
+            .home-hero .hero-text-block {
+                max-width: 100%;
+            }
+
+            .home-hero .hero-ctas {
+                flex-direction: column;
+                gap: 14px;
+            }
+        }
+
+        /* Homepage理念区 */
+        .home-philosophy {
+            padding: 60px 0 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .home-philosophy .philosophy-question {
+            font-family: var(--serif);
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            font-weight: 400;
+            line-height: 1.4;
+            max-width: 640px;
+            color: var(--near-black);
+        }
+
+        .home-philosophy .philosophy-examples {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 40px;
+            margin-top: 32px;
+            max-width: 700px;
+        }
+
+        .home-philosophy .philosophy-examples li {
+            list-style: none;
+            font-size: 0.95rem;
+            color: rgba(30, 43, 31, 0.7);
+            padding: 6px 0 6px 20px;
+            border-left: 2px solid var(--sage-light);
+            line-height: 1.5;
+        }
+
+        .home-philosophy .philosophy-closing {
+            margin-top: 36px;
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--near-black);
+            max-width: 480px;
+            line-height: 1.5;
+        }
+
+        .home-philosophy .philosophy-closing span {
+            display: block;
+            margin-top: 6px;
+            font-style: normal;
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            color: rgba(30, 43, 31, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            .home-philosophy .philosophy-examples {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        /* Homepage导航选择 */
+        .home-choice {
+            padding: 48px 0 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .home-choice .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            max-width: 700px;
+        }
+
+        .home-choice .choice-card {
+            padding: 24px 28px 28px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .home-choice .choice-card:hover {
+            border-color: var(--sage);
+            background: rgba(138, 155, 122, 0.04);
+            transform: translateY(-2px);
+        }
+
+        .home-choice .choice-card .choice-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .home-choice .choice-card h4 {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 8px 0 4px;
+            color: var(--near-black);
+        }
+
+        .home-choice .choice-card p {
+            font-size: 0.9rem;
+            color: rgba(30, 43, 31, 0.6);
+            line-height: 1.5;
+        }
+
+        .home-choice .choice-card .choice-arrow {
+            display: inline-block;
+            margin-top: 12px;
+            font-size: 0.95rem;
+            color: var(--sage);
+            font-weight: 450;
+            transition: var(--transition);
+        }
+
+        .home-choice .choice-card:hover .choice-arrow {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 600px) {
+            .home-choice .choice-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .home-choice .choice-card {
+                padding: 20px;
+            }
+        }
+
+        /* ============================================================
+                   PERSONALWARE PAGE
+                   ============================================================ */
+        .pw-opening {
+            padding: 32px 0 40px;
+        }
+
+        .pw-opening .pw-label {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .pw-opening h2 {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 600;
+            line-height: 1.1;
+            margin-top: 6px;
+            color: var(--near-black);
+        }
+
+        .pw-opening .pw-sub {
+            font-size: 1.05rem;
+            color: rgba(30, 43, 31, 0.6);
+            max-width: 480px;
+            margin-top: 8px;
+            font-weight: 400;
+        }
+
+        /* Case Studies */
+        .pw-cases {
+            padding: 16px 0 8px;
+        }
+
+        .case-item {
+            padding: 48px 0 48px;
+            border-top: 1px solid var(--border);
+        }
+
+        .case-item:first-of-type {
+            border-top: none;
+        }
+
+        .case-item .case-meta {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .case-item .case-meta .case-seed {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .case-item .case-meta .case-tags {
+            font-size: 0.75rem;
+            color: rgba(30, 43, 31, 0.35);
+            font-weight: 400;
+        }
+
+        .case-item .case-title {
+            font-family: var(--serif);
+            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+            font-weight: 600;
+            line-height: 1.15;
+            color: var(--near-black);
+        }
+
+        .case-item .case-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px 56px;
+            margin-top: 20px;
+        }
+
+        .case-item .case-details {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .case-item .case-details .detail-block {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .case-item .case-details .detail-block .detail-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .case-item .case-details .detail-block .detail-value {
+            font-size: 1rem;
+            color: var(--near-black);
+            line-height: 1.5;
+        }
+
+        .case-item .case-details .detail-block .detail-value .highlight {
+            background: var(--sage-pale);
+            padding: 0 6px;
+            border-radius: 2px;
+        }
+
+        .case-item .case-visual {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px 20px 20px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .case-item .case-visual:hover {
+            border-color: var(--sage-light);
+        }
+
+        .case-item .case-visual .visual-placeholder {
+            font-size: 0.85rem;
+            color: rgba(30, 43, 31, 0.3);
+            font-weight: 400;
+        }
+
+        .case-item .case-visual .visual-placeholder strong {
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .case-item .case-visual .visual-icon {
+            font-size: 2.6rem;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+
+        .case-item .case-annotation {
+            font-size: 0.75rem;
+            color: rgba(30, 43, 31, 0.35);
+            margin-top: 12px;
+            grid-column: 1 / -1;
+            text-align: right;
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        @media (max-width: 720px) {
+            .case-item .case-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .case-item {
+                padding: 32px 0;
+            }
+
+            .case-item .case-visual {
+                min-height: 140px;
+                padding: 20px 16px;
+            }
+        }
+
+        /* Mid-page CTA in Personalware */
+        .pw-mid-cta {
+            padding: 40px 0 24px;
+            border-top: 1px solid var(--border);
+            margin-top: 16px;
+        }
+
+        .pw-mid-cta .mid-cta-content {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+        }
+
+        .pw-mid-cta .mid-cta-content p {
+            font-family: var(--serif);
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--near-black);
+        }
+
+        .pw-mid-cta .mid-cta-content a {
+            font-size: 1rem;
+            font-weight: 480;
+            color: var(--sage);
+            border-bottom: 1.5px solid var(--sage-light);
+            padding-bottom: 3px;
+            transition: var(--transition);
+        }
+
+        .pw-mid-cta .mid-cta-content a:hover {
+            border-color: var(--sage);
+            color: var(--near-black);
+        }
+
+        /* ============================================================
+                   ABOUT PAGE
+                   ============================================================ */
+        .about-opening {
+            padding: 32px 0 40px;
+        }
+
+        .about-opening .about-label {
+            font-family: var(--sans);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .about-opening h2 {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 600;
+            line-height: 1.1;
+            margin-top: 6px;
+            color: var(--near-black);
+        }
+
+        .about-opening .about-sub {
+            font-size: 1.05rem;
+            color: rgba(30, 43, 31, 0.6);
+            max-width: 480px;
+            margin-top: 8px;
+        }
+
+        .about-body {
+            padding: 8px 0 16px;
+        }
+
+        .about-body .about-section {
+            padding: 36px 0 28px;
+            border-top: 1px solid var(--border);
+        }
+
+        .about-body .about-section:first-of-type {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .about-body .about-section .section-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .about-body .about-section .section-content {
+            max-width: 640px;
+        }
+
+        .about-body .about-section .section-content p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(30, 43, 31, 0.8);
+            margin-bottom: 14px;
+        }
+
+        .about-body .about-section .section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-body .about-section .section-content .pull-quote {
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--near-black);
+            padding-left: 20px;
+            border-left: 3px solid var(--sage-light);
+            margin: 18px 0;
+        }
+
+        .about-body .about-section .section-content .diff-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 12px 0 8px;
+        }
+
+        .about-body .about-section .section-content .diff-list li {
+            list-style: none;
+            padding: 6px 0 6px 24px;
+            border-left: 2px solid var(--sage-light);
+            font-size: 0.95rem;
+            color: rgba(30, 43, 31, 0.75);
+            line-height: 1.5;
+        }
+
+        .about-body .about-section .section-content .diff-list li strong {
+            color: var(--near-black);
+            font-weight: 500;
+        }
+
+        .about-body .about-section .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            margin-top: 12px;
+        }
+
+        .about-body .about-section .tech-tags span {
+            font-size: 0.8rem;
+            color: rgba(30, 43, 31, 0.5);
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 14px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            letter-spacing: 0.02em;
+        }
+
+        .about-body .about-section .flora-note {
+            font-size: 0.9rem;
+            color: rgba(30, 43, 31, 0.5);
+            font-style: italic;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+            margin-top: 16px;
+        }
+
+        .about-body .about-section .closing-line {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--near-black);
+            margin-top: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .about-body .about-section .section-content {
+                max-width: 100%;
+            }
+
+            .about-body .about-section .section-content .diff-list li {
+                padding-left: 16px;
+            }
+        }
+
+        /* ============================================================
+                   UTILITY
+                   ============================================================ */
+        .text-sage {
+            color: var(--sage);
+        }
+
+        .border-top-light {
+            border-top: 1px solid var(--border);
+        }
+
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mt-32 {
+            margin-top: 32px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* ============================================================
+                   RESPONSIVE FINE-TUNE
+                   ============================================================ */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .site-header .container {
+                padding: 0 16px;
+            }
+
+            .header-brand {
+                font-size: 0.95rem;
+            }
+
+            .global-cta {
+                padding: 48px 0 40px;
+                margin-top: 48px;
+            }
+
+            .global-cta .cta-left h3 {
+                font-size: 1.4rem;
+            }
+
+            .home-hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header class="site-header" role="banner">
+        <div class="container">
+            <div class="header-brand">
+                <span class="brand-name">PERSONALWARE</span>
+                <span class="brand-by">/ Jennifer Flora</span>
+            </div>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+
+            <nav class="header-nav" id="mainNav" role="navigation" aria-label="Main navigation">
+                <a href="#" data-page="home" class="active">Homepage</a>
+                <a href="#" data-page="personalware">Personalware</a>
+                <a href="#" data-page="about">About Jennifer</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    PAGE CONTAINER
+    ============================================================ -->
+    <main class="page-container">
+
+        <!-- ==========================================================
+        PAGE: HOMEPAGE
+        ========================================================== -->
+        <section class="page active" id="page-home" role="article" aria-label="Homepage">
+
+            <!-- Hero -->
+            <div class="home-hero">
+                <div class="container">
+                    <div class="hero-content">
+
+                        <!-- Flora mark (subtle) -->
+                        <div class="hero-flora-mark" aria-hidden="true">
+                            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="60" cy="60" r="48" stroke="currentColor" stroke-width="0.6" opacity="0.5" />
+                                <circle cx="60" cy="60" r="32" stroke="currentColor" stroke-width="0.4" opacity="0.3" />
+                                <path d="M60 8 L60 28 M60 92 L60 112 M8 60 L28 60 M92 60 L112 60 M22 22 L36 36 M84 84 L98 98 M22 98 L36 84 M84 36 L98 22"
+                                stroke="currentColor" stroke-width="0.5" opacity="0.25" />
+                            </svg>
+                        </div>
+
+                        <div class="hero-badge">PERSONAL SOFTWARE STUDIO</div>
+
+                        <h1>PERSONALWARE</h1>
+                        <div class="hero-byline">by Jennifer Flora</div>
+
+                        <div class="hero-tagline">Software, personally.</div>
+                        <div class="hero-sub">made around you.</div>
+
+                        <div class="hero-text-block">
+                            <p class="hero-main-text">
+                                <strong>Most software is made for everyone.</strong><br />
+                                This isn't.
+                            </p>
+                            <p class="hero-chinese">
+                                有些软件，不需要服务一百万人。<br />
+                                它只需要刚好适合一个具体的人。
+                            </p>
+                            <div class="hero-made">made around you.</div>
+                        </div>
+
+                        <div class="hero-ctas">
+                            <a href="#" data-page="personalware" class="cta-link">
+                                Explore work <span class="arrow">↓</span>
+                            </a>
+                            <a href="#global-cta" class="cta-link">
+                                Build yours <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Philosophy -->
+            <div class="home-philosophy">
+                <div class="container">
+                    <div class="philosophy-question">
+                        What if software could fit the person,<br />
+                        instead of the person fitting the software?
+                    </div>
+                    <ul class="philosophy-examples">
+                        <li>一个只理解你课程安排的 DDL 工具</li>
+                        <li>一个按照你的表达习惯工作的 AI</li>
+                        <li>一个替你处理某项重复工作的自动化</li>
+                        <li>一个世界上也许只有几个人需要，但他们真的需要的小软件</li>
+                    </ul>
+                    <div class="philosophy-closing">
+                        The software you need might not exist yet.
+                        <span>That may be enough reason to build it.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Choice -->
+            <div class="home-choice">
+                <div class="container">
+                    <div class="choice-grid">
+                        <a href="#" data-page="personalware" class="choice-card">
+                            <div class="choice-label">Explore</div>
+                            <h4>Personalware</h4>
+                            <p>See what grew from real problems.</p>
+                            <span class="choice-arrow">→</span>
+                        </a>
+                        <a href="#" data-page="about" class="choice-card">
+                            <div class="choice-label">Meet</div>
+                            <h4>About Jennifer</h4>
+                            <p>Meet the person behind the software.</p>
+                            <span class="choice-arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global CTA (included inline via partial) -->
+            <div id="global-cta" class="global-cta">
+                <div class="container">
+                    <div class="cta-grid">
+                        <div class="cta-left">
+                            <div class="cta-label">A Small Invitation</div>
+                            <h3>You don't need a PRD.</h3>
+                            <div class="cta-sub">
+                                One sentence is enough:<br />
+                                <em>“我希望有个东西可以……”</em>
+                            </div>
+                        </div>
+                        <div class="cta-right">
+                            <div class="cta-option">
+                                <div class="option-icon">✦</div>
+                                <div class="option-content">
+                                    <div class="option-title">BUILD SOMETHING</div>
+                                    <div class="option-desc">Tell me your weird idea. →</div>
+                                </div>
+                                <div class="option-arrow">→</div>
+                            </div>
+                            <div class="cta-option">
+                                <div class="option-icon">◈</div>
+                                <div class="option-content">
+                                    <div class="option-title">HANG AROUND</div>
+                                    <div class="option-desc">Come into the lab. →</div>
+                                </div>
+                                <div class="option-arrow">→</div>
+                            </div>
+                            <div class="cta-qr-hint">
+                                <span class="qr-placeholder"><span>📱</span> [WECHAT QR]</span>
+                                <span class="qr-placeholder"><span>💬</span> [COMMUNITY QR]</span>
+                                <span style="font-size:0.7rem;color:rgba(30,43,31,0.3);">Already have a thought? Even a sentence is enough.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================================
+        PAGE: PERSONALWARE
+        ========================================================== -->
+        <section class="page" id="page-personalware" role="article" aria-label="Personalware">
+
+            <div class="container">
+
+                <!-- Opening -->
+                <div class="pw-opening">
+                    <div class="pw-label">PERSONALWARE / COLLECTION</div>
+                    <h2>Made for someone.</h2>
+                    <div class="pw-sub">
+                        Specific people. Specific problems. Software made around them.
+                    </div>
+                </div>
+
+                <!-- Cases -->
+                <div class="pw-cases">
+
+                    <!-- Case 001 -->
+                    <div class="case-item">
+                        <div class="case-meta">
+                            <span class="case-seed">seed 001</span>
+                            <span class="case-tags">Web · AI · Automation</span>
+                        </div>
+                        <div class="case-title">DDL Copilot</div>
+                        <div class="case-grid">
+                            <div class="case-details">
+                                <div class="detail-block">
+                                    <span class="detail-label">FOR</span>
+                                    <span class="detail-value">a university student</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">PROBLEM</span>
+                                    <span class="detail-value">deadlines live everywhere</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">BUILT</span>
+                                    <span class="detail-value">a personal deadline copilot</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">EXPERIENCE</span>
+                                    <span class="detail-value"><span class="highlight">[LIVE DEMO]</span> · real interface, before &amp; after</span>
+                                </div>
+                            </div>
+                            <div class="case-visual">
+                                <div class="visual-icon">📋</div>
+                                <div class="visual-placeholder">
+                                    <strong>[PROJECT NAME]</strong><br />
+                                    [PROJECT DESCRIPTION]
+                                </div>
+                            </div>
+                            <div class="case-annotation">🌱 growing · shipped v1.2</div>
+                        </div>
+                    </div>
+
+                    <!-- Case 002 -->
+                    <div class="case-item">
+                        <div class="case-meta">
+                            <span class="case-seed">seed 002</span>
+                            <span class="case-tags">AI · API · Workflow</span>
+                        </div>
+                        <div class="case-title">Expression AI</div>
+                        <div class="case-grid">
+                            <div class="case-details">
+                                <div class="detail-block">
+                                    <span class="detail-label">FOR</span>
+                                    <span class="detail-value">a writer with a distinct voice</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">PROBLEM</span>
+                                    <span class="detail-value">generic AI doesn't match their style</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">BUILT</span>
+                                    <span class="detail-value">an AI that works <em>their</em> way</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">EXPERIENCE</span>
+                                    <span class="detail-value"><span class="highlight">[LIVE DEMO]</span> · workflow integration</span>
+                                </div>
+                            </div>
+                            <div class="case-visual">
+                                <div class="visual-icon">✎</div>
+                                <div class="visual-placeholder">
+                                    <strong>[PROJECT NAME]</strong><br />
+                                    [PROJECT DESCRIPTION]
+                                </div>
+                            </div>
+                            <div class="case-annotation">🌱 currently growing · v0.9 beta</div>
+                        </div>
+                    </div>
+
+                    <!-- Case 003 -->
+                    <div class="case-item">
+                        <div class="case-meta">
+                            <span class="case-seed">seed 003</span>
+                            <span class="case-tags">Automation · Mini App</span>
+                        </div>
+                        <div class="case-title">Repetitive Workflow Bot</div>
+                        <div class="case-grid">
+                            <div class="case-details">
+                                <div class="detail-block">
+                                    <span class="detail-label">FOR</span>
+                                    <span class="detail-value">a small team lead</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">PROBLEM</span>
+                                    <span class="detail-value">repetitive tasks eat into creative time</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">BUILT</span>
+                                    <span class="detail-value">a bespoke automation workflow</span>
+                                </div>
+                                <div class="detail-block">
+                                    <span class="detail-label">EXPERIENCE</span>
+                                    <span class="detail-value"><span class="highlight">[LIVE DEMO]</span> · before / after comparison</span>
+                                </div>
+                            </div>
+                            <div class="case-visual">
+                                <div class="visual-icon">⚙️</div>
+                                <div class="visual-placeholder">
+                                    <strong>[PROJECT NAME]</strong><br />
+                                    [PROJECT DESCRIPTION]
+                                </div>
+                            </div>
+                            <div class="case-annotation">🌱 bloomed / shipped · in production</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Mid-page CTA -->
+                <div class="pw-mid-cta">
+                    <div class="mid-cta-content">
+                        <p>Have something this specific in mind?</p>
+                        <a href="#global-cta">Build yours →</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Global CTA -->
+            <div class="global-cta">
+                <div class="container">
+                    <div class="cta-grid">
+                        <div class="cta-left">
+                            <div class="cta-label">A Small Invitation</div>
+                            <h3>You don't need a PRD.</h3>
+                            <div class="cta-sub">
+                                One sentence is enough:<br />
+                                <em>“我希望有个东西可以……”</em>
+                            </div>
+                        </div>
+                        <div class="cta-right">
+                            <div class="cta-option">
+                                <div class="option-icon">✦</div>
+                                <div class="option-content">
+                                    <div class="option-title">BUILD SOMETHING</div>
+                                    <div class="option-desc">Tell me your weird idea. →</div>
+                                </div>
+                                <div class="option-arrow">→</div>
+                            </div>
+                            <div class="cta-option">
+                                <div class="option-icon">◈</div>
+                                <div class="option-content">
+                                    <div class="option-title">HANG AROUND</div>
+                                    <div class="option-desc">Come into the lab. →</div>
+                                </div>
+                                <div class="option-arrow">→</div>
+                            </div>
+                            <div class="cta-qr-hint">
+                                <span class="qr-placeholder"><span>📱</span> [WECHAT QR]</span>
+                                <span class="qr-placeholder"><span>💬</span> [COMMUNITY QR]</span>
+                                <span style="font-size:0.7rem;color:rgba(30,43,31,0.3);">Already have a thought? Even a sentence is enough.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================================
+        PAGE: ABOUT JENNIFER
+        ========================================================== -->
+        <section class="page" id="page-about" role="article" aria-label="About Jennifer">
+
+            <div class="container">
+
+                <!-- Opening -->
+                <div class="about-opening">
+                    <div class="about-label">ABOUT / JENNIFER FLORA</div>
+                    <h2>I notice little frictions.</h2>
+                    <div class="about-sub">I build around people.</div>
+                </div>
+
+                <!-- Body -->
+                <div class="about-body">
+
+                    <!-- Core Story -->
+                    <div class="about-section">
+                        <div class="section-label">Core Story</div>
+                        <div class="section-content">
+                            <p>
+                                我很容易注意到一些很小的摩擦：
+                                <br />“为什么这一步每次都要手动？”
+                                <br />“为什么软件不能记住我的习惯？”
+                                <br />“为什么所有人都要按照同一个工具的逻辑工作？”
+                                <br />“这件事真的需要这么麻烦吗？”
+                            </p>
+                            <div class="pull-quote">
+                                PERSONALWARE 就是从这些问题里长出来的。
+                            </div>
+                            <p>
+                                <strong>I build software around people, not the other way around.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Differentiation -->
+                    <div class="about-section">
+                        <div class="section-label">How I work differently</div>
+                        <div class="section-content">
+                            <ul class="diff-list">
+                                <li><strong>I start with the person, not the feature list.</strong><br />
+                                先理解这个人真实在做什么，而不是先列功能。</li>
+                                <li><strong>You don't need to translate yourself into technical language.</strong><br />
+                                你不需要先知道 Agent、API、数据库或者技术方案。</li>
+                                <li><strong>Messy ideas are welcome.</strong><br />
+                                一句模糊的“我希望有个东西可以……”也可以成为起点。</li>
+                                <li><strong>I care about how it feels to use.</strong><br />
+                                不仅关注“功能有没有实现”，也关注软件是否真的符合使用者的习惯。</li>
+                                <li><strong>I build small before I build big.</strong><br />
+                                先让真正的问题被解决，再决定是否值得扩大。</li>
+                            </ul>
+                            <p style="margin-top:14px;font-style:italic;color:rgba(30,43,31,0.6);">
+                                “她不是在卖开发工时，她在帮我把一个模糊的需求翻译成合适的软件。”
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Under the Hood -->
+                    <div class="about-section">
+                        <div class="section-label">Under the Hood</div>
+                        <div class="section-content">
+                            <p style="color:rgba(30,43,31,0.6);">
+                                <em>The technology comes after the problem.</em>
+                            </p>
+                            <div class="tech-tags">
+                                <span>Web</span>
+                                <span>Mini Apps</span>
+                                <span>AI</span>
+                                <span>Agents</span>
+                                <span>Skills</span>
+                                <span>Automation</span>
+                                <span>APIs</span>
+                                <span>Databases</span>
+                                <span>Workflows</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Texture -->
+                    <div class="about-section">
+                        <div class="section-label">Currently curious about</div>
+                        <div class="section-content">
+                            <p style="color:rgba(30,43,31,0.7);">
+                                small tools that make big differences &middot; how people actually work &middot;
+                                the space between code and care
+                            </p>
+                            <div class="flora-note">
+                                ideas are seeded &middot; projects grow &middot; some bloom &middot; some become compost
+                            </div>
+                            <div class="closing-line">
+                                Software, personally.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Global CTA -->
+            <div class="global-cta">
+                <div class="container">
+                    <div class="cta-grid">
+                        <div class="cta-left">
+                            <div class="cta-label">A Small Invitation</div>
+                            <h3>You don't need a PRD.</h3>
+                            <div class="cta-sub">
+                                One sentence is enough:<br />
+                                <em>“我希望有个东西可以……”</em>
+                            </div>
+                        </div>
+                        <div class="cta-right">
+                            <div class="cta-option">
+                                <div class="option-icon">✦</div>
+                                <div class="option-content">
+                                    <div class="option-title">BUILD SOMETHING</div>
+                                    <div class="option-desc">Tell me your weird idea. →</div>
+                                </div>
+                                <div class="option-arrow">→</div>
+                            </div>
+                            <div class="cta-option">
+                                <div class="option-icon">◈</div>
+                                <div class="option-content">
+                                    <div class="option-title">HANG AROUND</div>
+                                    <div class="option-desc">Come into the lab. →</div>
+                                </div>
+                                <div class="option-arrow">→</div>
+                            </div>
+                            <div class="cta-qr-hint">
+                                <span class="qr-placeholder"><span>📱</span> [WECHAT QR]</span>
+                                <span class="qr-placeholder"><span>💬</span> [COMMUNITY QR]</span>
+                                <span style="font-size:0.7rem;color:rgba(30,43,31,0.3);">Already have a thought? Even a sentence is enough.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // DOM refs
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('.header-nav a');
+            const menuToggle = document.getElementById('menuToggle');
+            const mainNav = document.getElementById('mainNav');
+
+            // Helper: show page
+            function showPage(pageId) {
+                // Hide all pages
+                pages.forEach(p => p.classList.remove('active'));
+
+                // Show target
+                const target = document.getElementById('page-' + pageId);
+                if (target) target.classList.add('active');
+
+                // Update nav active state
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.page === pageId);
+                });
+
+                // Close mobile nav
+                mainNav.classList.remove('open');
+                menuToggle.classList.remove('open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Nav click handler
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    if (page) showPage(page);
+                    // Update URL hash without scroll
+                    history.pushState(null, '', '#' + page);
+                });
+            });
+
+            // Also handle any internal links with data-page attribute (choice cards etc.)
+            document.querySelectorAll('[data-page]').forEach(el => {
+                // skip nav links already handled
+                if (el.closest('.header-nav')) return;
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    if (page) showPage(page);
+                    history.pushState(null, '', '#' + page);
+                });
+            });
+
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', function() {
+                const isOpen = mainNav.classList.toggle('open');
+                this.classList.toggle('open');
+                this.setAttribute('aria-expanded', isOpen);
+            });
+
+            // Close menu on link click (mobile)
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    mainNav.classList.remove('open');
+                    menuToggle.classList.remove('open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Handle hash on load
+            function handleHash() {
+                const hash = window.location.hash.replace('#', '');
+                if (hash && ['home', 'personalware', 'about'].includes(hash)) {
+                    showPage(hash);
+                } else {
+                    // default to home
+                    showPage('home');
+                }
+            }
+
+            // Handle back/forward
+            window.addEventListener('popstate', function() {
+                const hash = window.location.hash.replace('#', '');
+                if (hash && ['home', 'personalware', 'about'].includes(hash)) {
+                    showPage(hash);
+                } else {
+                    showPage('home');
+                }
+            });
+
+            // Init
+            handleHash();
+
+            // CTA "Build yours" links that point to #global-cta should scroll smoothly
+            document.querySelectorAll('a[href="#global-cta"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.getElementById('global-cta');
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Also handle any other anchor links that might be present
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === '#') return;
+                const targetId = href.replace('#', '');
+                if (targetId && targetId !== 'global-cta' && !['home', 'personalware', 'about'].includes(
+                    targetId)) {
+                    // Only handle internal page anchors if they exist
+                    const targetEl = document.getElementById(targetId);
+                    if (targetEl) {
+                        link.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            targetEl.scrollIntoView({ behavior: 'smooth' });
+                        });
+                    }
+                }
+            });
+
+        })();
+    </script>
+
+</body>
+</html>
